@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineBreak
@@ -43,12 +45,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.v2ray.ang.R
-import com.v2ray.ang.compose.ItemDivider
+import com.v2ray.ang.compose.LocalDarkTheme
 import com.v2ray.ang.compose.ReorderableGridItem
 import com.v2ray.ang.compose.ReorderableListItem
 import com.v2ray.ang.compose.colorConfigType
 import com.v2ray.ang.compose.colorPing
 import com.v2ray.ang.compose.colorPingRed
+import com.v2ray.ang.compose.glassPanel
 import com.v2ray.ang.compose.verticalScrollbar
 import com.v2ray.ang.dto.entities.ProfileItem
 import com.v2ray.ang.dto.entities.ServersCache
@@ -207,7 +210,7 @@ private fun ServerListPage(
                                 onRemoveServer = onRemoveServer
                             )
                         }
-                        ItemDivider()
+                        Spacer(Modifier.height(8.dp))
                     }
                 } else {
                     ServerItemRow(
@@ -220,7 +223,7 @@ private fun ServerListPage(
                         onMoreServer = onMoreServer,
                         onRemoveServer = onRemoveServer
                     )
-                    ItemDivider()
+                    Spacer(Modifier.height(8.dp))
                 }
             }
         }
@@ -294,7 +297,6 @@ private fun ServerItemColumn(
             onRemove = { onRemoveServer(serverCache.guid) },
             onMore = { onMoreServer(serverCache.guid, profile) }
         )
-        ItemDivider()
     }
 }
 
@@ -316,9 +318,18 @@ fun ServerListItem(
     modifier: Modifier = Modifier,
     dragModifier: Modifier = Modifier
 ) {
+    val isDarkTheme = LocalDarkTheme.current
+    val selectionTint = if (isSelected) {
+        MaterialTheme.colorScheme.primary.copy(alpha = if (isDarkTheme) 0.16f else 0.12f)
+    } else {
+        Color.Transparent
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 4.dp)
+            .glassPanel(shape = RoundedCornerShape(16.dp), isDarkTheme = isDarkTheme)
+            .background(selectionTint, RoundedCornerShape(16.dp))
             .height(IntrinsicSize.Min)
             .clickable(onClick = onClick)
             .then(dragModifier)

@@ -1,52 +1,28 @@
 package com.v2ray.ang.compose
 
-import androidx.compose.animation.core.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.unit.Dp
+import android.os.Build
 
 /**
  * Performance configuration for low-end devices.
  * Detects weak CPUs and reduces effects accordingly.
+ * All values are lazy-initialized at first access to avoid startup overhead.
  */
 
-// Detection: devices with < 4 cores or API < 24 are "low-end"
+// Detection: devices with < 4 cores or old API are "low-end"
 val isLowEndDevice: Boolean by lazy {
-    val cores = Runtime.getRuntime().availableProcessors()
-    val api = android.os.Build.VERSION.SDK_INT
-    cores < 4 || api < 24
+    try {
+        val cores = Runtime.getRuntime().availableProcessors()
+        cores < 4 || Build.VERSION.SDK_INT < 24
+    } catch (e: Exception) {
+        true  // Assume low-end on error (safer)
+    }
 }
 
-// Fast spring for Dp
-@Composable
-fun fastDp(): SpringSpec<Dp> = spring(
-    dampingRatio = Spring.DampingRatioNoBouncy,
-    stiffness = if (isLowEndDevice) Spring.StiffnessHigh else Spring.StiffnessMedium
-)
-
-/**
- * Reduced motion: disable blur entirely on very old devices
- */
+// Blur only on API 31+ (RenderEffect) AND high-end devices
 val shouldUseBlur: Boolean by lazy {
-    android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S && !isLowEndDevice
-}
-
-/**
- * Should animate pager transitions
- */
-val shouldAnimatePager: Boolean by lazy {
-    !isLowEndDevice
-}
-
-/**
- * Glass panel opacity (higher on low-end = more solid = faster)
- */
-fun glassOpacity(isDark: Boolean): Float {
-    return if (isLowEndDevice) {
-        if (isDark) 0.85f else 0.90f  // More opaque = less blur needed
-    } else {
-        if (isDark) 0.08f else 0.45f  // Default glass transparency
+    try {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !isLowEndDevice
+    } catch (e: Exception) {
+        false
     }
 }

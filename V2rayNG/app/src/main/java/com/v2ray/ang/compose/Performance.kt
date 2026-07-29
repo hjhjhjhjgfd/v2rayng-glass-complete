@@ -19,22 +19,9 @@ val isLowEndDevice: Boolean by lazy {
     cores < 4 || api < 24
 }
 
-// Animation spec: fast spring for high-end, snap for low-end
+// Fast spring for Dp
 @Composable
-fun fastSpring<Float>(): SpringSpec<Float> = spring(
-    dampingRatio = Spring.DampingRatioMediumBouncy,
-    stiffness = if (isLowEndDevice) Spring.StiffnessHigh else Spring.StiffnessMedium
-)
-
-// Short tween for low-end
-@Composable
-fun fastTween(): TweenSpec<Float> = tween(
-    durationMillis = if (isLowEndDevice) 100 else 250
-)
-
-// Dp animation
-@Composable
-fun fastDpSpring(): SpringSpec<Dp> = spring(
+fun fastDp(): SpringSpec<Dp> = spring(
     dampingRatio = Spring.DampingRatioNoBouncy,
     stiffness = if (isLowEndDevice) Spring.StiffnessHigh else Spring.StiffnessMedium
 )

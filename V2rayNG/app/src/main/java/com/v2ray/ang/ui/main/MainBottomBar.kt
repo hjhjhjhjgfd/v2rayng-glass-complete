@@ -22,11 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.v2ray.ang.R
 import com.v2ray.ang.compose.*
-import com.v2ray.ang.util.Utils
 
 /**
- * PLUTO 2027 — Bottom Status Card with quick actions
- * Modern, bouncy, with pull-up gestures
+ * PLUTONG 2027 — Bottom Status Card with expandable quick actions
+ * Telegram-style: glass bar with tap-to-expand actions
  */
 @Composable
 fun MainBottomBar(
@@ -38,7 +37,7 @@ fun MainBottomBar(
     var expanded by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        // Quick actions row (shown when expanded)
+        // Quick actions row (expandable)
         AnimatedVisibility(
             visible = expanded,
             enter = expandVertically(),
@@ -47,31 +46,36 @@ fun MainBottomBar(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
                     .surfaceGlass(RoundedCornerShape(20.dp), isDarkTheme)
                     .padding(12.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 QuickAction(
-                    icon = R.drawable.ic_speed_24dp,
-                    label = "Speed",
+                    icon = R.drawable.ic_ping_24dp,
+                    label = "Ping All",
                     onClick = { onAction(MainAction.TestAllServers); expanded = false }
                 )
                 QuickAction(
-                    icon = R.drawable.ic_reorder_24dp,
+                    icon = R.drawable.ic_sort_24dp,
                     label = "Sort",
-                    onClick = { onAction(MainAction.SortServers); expanded = false }
+                    onClick = { onAction(MainAction.SortByTestResults); expanded = false }
                 )
                 QuickAction(
                     icon = R.drawable.ic_add_24dp,
                     label = "Import",
-                    onClick = { onAction(MainAction.ImportConfig); expanded = false }
+                    onClick = { onAction(MainAction.ImportClipboard); expanded = false }
+                )
+                QuickAction(
+                    icon = R.drawable.ic_delete_24dp,
+                    label = "Clean",
+                    onClick = { onAction(MainAction.RemoveInvalidServers); expanded = false }
                 )
             }
         }
 
         Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
-            // Main status card
+            // Main status card — glass panel
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -83,7 +87,7 @@ fun MainBottomBar(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Animated status dot
+                    // Status dot — animated pulse (telegram-style)
                     Box(
                         Modifier
                             .size(12.dp)
@@ -103,7 +107,7 @@ fun MainBottomBar(
                     )
                 }
 
-                // FAB Start/Stop
+                // Circular FAB — Start/Stop with gradient
                 Box(
                     modifier = Modifier
                         .size(48.dp)

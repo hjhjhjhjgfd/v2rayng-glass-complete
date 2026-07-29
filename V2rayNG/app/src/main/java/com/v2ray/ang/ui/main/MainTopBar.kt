@@ -1,11 +1,9 @@
 package com.v2ray.ang.ui.main
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -16,8 +14,7 @@ import com.v2ray.ang.R
 import com.v2ray.ang.compose.*
 
 /**
- * PLUTO 2027 — Top Bar with glass effect + search
- * Original signature preserved for compatibility with MainScreen.
+ * PLUTONG 2027 — Top Bar with glass effect + search
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,13 +51,13 @@ fun MainTopBar(
                     modifier = Modifier.fillMaxWidth(),
                     trailingIcon = {
                         IconButton(onClick = onSearchClose) {
-                            Icon(painterResource(R.drawable.ic_close_24dp), "Close", tint = glassAccent)
+                            Icon(painterResource(R.drawable.ic_arrow_back_24dp), "Close", tint = glassAccent)
                         }
                     }
                 )
             } else {
                 Text(
-                    text = if (isLoading) "Loading..." else "Pluto",
+                    text = if (isLoading) "Loading..." else "PlutoNG",
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
                     color = if (isDarkTheme) glassTextDark else glassTextLight

@@ -1,6 +1,7 @@
 package com.v2ray.ang.ui.main
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryScrollableTabRow
@@ -12,11 +13,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.v2ray.ang.compose.LocalDarkTheme
 import com.v2ray.ang.compose.colorFabActive
+import com.v2ray.ang.compose.glassPanel
 import com.v2ray.ang.dto.GroupMapItem
 import com.v2ray.ang.dto.entities.ServersCache
 import kotlinx.coroutines.flow.StateFlow
@@ -29,10 +33,14 @@ fun GroupTabBar(
     onTabClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDarkTheme = LocalDarkTheme.current
     PrimaryScrollableTabRow(
         selectedTabIndex = selectedTabIndex.coerceIn(0, groups.lastIndex),
-        modifier = modifier.fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+            .glassPanel(shape = RoundedCornerShape(18.dp), isDarkTheme = isDarkTheme),
+        containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onSurface,
         edgePadding = 16.dp,
         minTabWidth = 56.dp,

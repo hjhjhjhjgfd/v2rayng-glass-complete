@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,10 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.v2ray.ang.R
-import com.v2ray.ang.compose.AppDivider
 import com.v2ray.ang.compose.colorFabActive
 import com.v2ray.ang.compose.colorFabInactiveDark
 import com.v2ray.ang.compose.colorFabInactiveLight
+import com.v2ray.ang.compose.glassPanel
 
 @Composable
 fun MainBottomBar(
@@ -40,14 +41,15 @@ fun MainBottomBar(
 ) {
     Box(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            AppDivider()
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
                     .windowInsetsPadding(WindowInsets.navigationBars)
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
                     .height(64.dp)
+                    .glassPanel(shape = RoundedCornerShape(24.dp), isDarkTheme = isDarkTheme)
                     .clickable(onClick = { onAction(MainAction.TestCurrentServer) }),
-                color = MaterialTheme.colorScheme.surface,
+                color = Color.Transparent,
                 tonalElevation = 0.dp
             ) {
                 Row(
